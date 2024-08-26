@@ -1,0 +1,36 @@
+          wget -q https://android.googlesource.com/platform/external/avb/+archive/refs/heads/master.tar.gz -O - | tar xzf - avbtool.py
+          chmod +x avbtool.py
+          sudo mv avbtool.py /usr/local/bin/avbtool
+
+      - name: Create CruelKernel images for ${{ matrix.model }}
+        run: ./cruelbuild :mkimg
+      - name: Create CruelKernel installer for ${{ matrix.model }}
+        if: env.INSTALLER == 'yes'
+        run: ./cruelbuild :pack
+
+      - name: Avoid Double Zipping in Installer
+        if: env.INSTALLER == 'yes'
+        run: |
+          mkdir -p installer && cd installer
+          unzip ../CruelKernel.zip
+      - name: Upload Kernel Zip
+        if: env.INSTALLER == 'yes'
+        uses: actions/upload-artifact@v2
+        with:
+          name: CruelKernel-${{ matrix.model }}
+          path: installer/*
+          if-no-files-found: error
+      - name: Upload Kernel Images
+        if: env.INSTALLER != 'yes'
+        uses: actions/upload-artifact@v2
+        with:
+          name: CruelKernel-${{ matrix.model }}
+          path: '*.img'
+          if-no-files-found: error
+
+      - name: Upload Kernel Info
+        uses: actions/upload-artifact@v2
+        with:
+          name: ConfigurationInfo-${{ matrix.model }}
+          path: config.*
+          if-no-files-found: error
