@@ -58,7 +58,7 @@ jobs:
                        name="Cruel-devel"        \
                        os_patch_level=2022-10    \
                        toolchain=$TOOLCHAIN      \
-                       +magisk=v26.0             \
+                       +magisk=v29.0             \
                        +nohardening              \
                        +ttl                      \
                        +wireguard                \
