@@ -611,19 +611,29 @@ RANDOMSEED=0x{secrets.token_hex(8)}
 
 def switch_toolchain(compiler):
     cc = os.path.abspath(get_toolchain_cc(compiler))
-    if cc.startswith(os.path.realpath('toolchain')):
-        branch = run(['git', 'submodule', 'foreach', 'git', 'rev-parse', '--abbrev-ref', 'HEAD'],
-                     check=True, stdout=PIPE).stdout.decode('utf-8').splitlines()[1]
+    toolchain_path = os.path.realpath('toolchain')
+    if cc.startswith(toolchain_path):
+        branch = run(
+            ['git', '-C', toolchain_path, 'rev-parse', '--abbrev-ref', 'HEAD'],
+            check=True, stdout=PIPE
+        ).stdout.decode('utf-8').strip()
         if not (tool_exists(cc) and compiler == branch):
-            ret = run(['git', 'submodule', 'foreach', 'git', 'rev-parse', '--verify', '--quiet', compiler],
-                      stdout=DEVNULL, stderr=DEVNULL)
+            ret = run(
+                ['git', '-C', toolchain_path, 'rev-parse', '--verify', '--quiet', compiler],
+                stdout=DEVNULL, stderr=DEVNULL
+            )
             if ret.returncode != 0:
                 try:
-                    run(['git', 'submodule', 'foreach', 'git', 'branch', compiler, 'origin/' + compiler],
-                        check=True, stdout=DEVNULL, stderr=DEVNULL)
+                    run(
+                        ['git', '-C', toolchain_path, 'branch', compiler, 'origin/' + compiler],
+                        check=True, stdout=DEVNULL, stderr=DEVNULL
+                    )
                 except CalledProcessError:
                     fatal("Can't checkout to toolchain: " + compiler)
-            run(['git', 'submodule', 'foreach', 'git', 'checkout', compiler], check=True)
+            run(
+                ['git', '-C', toolchain_path, 'checkout', compiler],
+                check=True
+            )
 
 def build(compiler, objtree='.'):
     env = {}
