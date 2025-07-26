@@ -17,9 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Initialize and update only kernelsu-next submodule
-        run: git submodule update --init --recursive KernelSU-Next
-
       - uses: actions/setup-python@v4
         with:
           python-version: '3.7'
@@ -61,7 +58,7 @@ jobs:
                        name="Cruel-devel"        \
                        os_patch_level=2022-10    \
                        toolchain=$TOOLCHAIN      \
-                       -magisk                   \
+                       +magisk                   \
                        +nohardening              \
                        +ttl                      \
                        +wireguard                \
