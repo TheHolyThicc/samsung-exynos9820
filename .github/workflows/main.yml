@@ -59,6 +59,7 @@ jobs:
           ./cruelbuild config                    \
                        model=${{ matrix.model }} \
                        name="Cruel-devel"        \
+                       os_patch_level=2023-01-01 \
                        toolchain=$TOOLCHAIN      \
                        -magisk                   \
                        +nohardening              \
