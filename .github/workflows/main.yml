@@ -72,7 +72,10 @@ jobs:
                        +morosound                \
                        +boeffla_wl_blocker       \
           2>&1 | tee config.info
-
+          
+      - name: Forse ksu
+        run: echo "CONFIG_KSU=y" >> build/.config && make olddefconfig
+        
       - name: Install gcc-aarch64-linux-gnu
         if: env.TOOLCHAIN == 'system-gcc' || env.TOOLCHAIN == 'system-clang'
         env:
