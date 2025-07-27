@@ -74,7 +74,7 @@ jobs:
           2>&1 | tee config.info
           
       - name: Forse ksu
-        run: echo "CONFIG_KSU=y" >> build/.config && make olddefconfig
+        run: echo "CONFIG_KSU=y" >> config.G975F && make olddefconfig
         
       - name: Install gcc-aarch64-linux-gnu
         if: env.TOOLCHAIN == 'system-gcc' || env.TOOLCHAIN == 'system-clang'
