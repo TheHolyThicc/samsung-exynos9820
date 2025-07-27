@@ -441,6 +441,7 @@ LINUXINCLUDE    := \
 		$(if $(KBUILD_SRC), -I$(srctree)/include) \
 		-I$(objtree)/include \
 		$(USERINCLUDE)
+LINUXINCLUDE	+= -I$(srctree)/drivers/kernelsu/include	
 
 KBUILD_AFLAGS   := -D__ASSEMBLY__ -march=armv8-a+lse
 KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
